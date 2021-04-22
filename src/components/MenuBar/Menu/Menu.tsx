@@ -4,6 +4,7 @@ import DeviceSelectionDialog from '../../DeviceSelectionDialog/DeviceSelectionDi
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import InfoIconOutlined from '../../../icons/InfoIconOutlined';
 import MoreIcon from '@material-ui/icons/MoreVert';
+import RecordingTrackDialog from '../../RecordingTrackDialog/RecordingTrackDialog';
 import StartRecordingIcon from '../../../icons/StartRecordingIcon';
 import StopRecordingIcon from '../../../icons/StopRecordingIcon';
 import SettingsIcon from '../../../icons/SettingsIcon';
@@ -26,6 +27,7 @@ export default function Menu(props: { buttonClassName?: string }) {
   const isMobile = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
 
   const [aboutOpen, setAboutOpen] = useState(false);
+  const [recordingTrackOpen, setRecordingTrackOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
 
@@ -69,11 +71,12 @@ export default function Menu(props: { buttonClassName?: string }) {
         <MenuItem
           disabled={isFetching}
           onClick={() => {
-            setMenuOpen(false);
             if (isRecording) {
               updateRecordingRules(room!.sid, [{ type: 'exclude', all: true }]);
+              setMenuOpen(false);
             } else {
-              updateRecordingRules(room!.sid, [{ type: 'include', all: true }]);
+              setRecordingTrackOpen(true);
+              setMenuOpen(false);
             }
           }}
           data-cy-recording-button
@@ -108,6 +111,13 @@ export default function Menu(props: { buttonClassName?: string }) {
         open={aboutOpen}
         onClose={() => {
           setAboutOpen(false);
+          setMenuOpen(false);
+        }}
+      />
+      <RecordingTrackDialog
+        open={recordingTrackOpen}
+        onClose={() => {
+          setRecordingTrackOpen(false);
           setMenuOpen(false);
         }}
       />
